@@ -1,0 +1,15 @@
+with base_data as
+(
+SELECT EXTRACT(month from event_date) as cur_mon,
+user_id,
+event_type, event_date,
+lag(event_date,1) over(PARTITION BY user_id ORDER BY event_date ASC, user_id ASC) as perv_date
+FROM user_actions
+)
+select cur_mon,
+COUNT(user_id) as mau
+from base_data
+WHERE event_type in ('sign-in','like','comment') and
+EXTRACT(month from perv_date) = '6'
+and cur_mon = '7'
+GROUP BY 1; 
