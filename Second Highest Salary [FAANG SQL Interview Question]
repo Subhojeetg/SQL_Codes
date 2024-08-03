@@ -1,0 +1,10 @@
+WITH basedata as 
+(
+SELECT 
+salary,
+ROW_NUMBER() OVER(ORDER BY Salary desc) as R
+FROM employee
+)
+SELECT salary from basedata 
+where R=2
+;
